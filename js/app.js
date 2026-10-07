@@ -2,15 +2,23 @@
 
 document.getElementById('year').textContent = new Date().getFullYear();
 
-// preloader
+// preloader: logo builds itself out of pixels, then dissolves
 (function(){
   const pre = document.getElementById('preload');
+  const logo = PixelLogo(document.getElementById('preloadLogo'), 'assets/logo-color.png');
   const start = performance.now();
+  let hidden = false;
   function hide(){
+    if (hidden) return;
+    hidden = true;
     const wait = Math.max(0, LOADER_MIN_MS - (performance.now() - start));
     setTimeout(() => {
-      pre.classList.add('done');
-      document.body.classList.remove('loading');
+      logo.dissolve();
+      setTimeout(() => {
+        pre.classList.add('done');
+        document.body.classList.remove('loading');
+        heroIn();
+      }, 650);
     }, wait);
   }
   // don't hang if fonts/images are slow
@@ -23,27 +31,26 @@ document.getElementById('year').textContent = new Date().getFullYear();
 const nav = document.getElementById('nav');
 addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 30), {passive:true});
 
-// scroll reveal
+// scroll reveal, dithered in
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const delayOf = el => el.classList.contains('d3') ? 240 : el.classList.contains('d2') ? 160 : el.classList.contains('d1') ? 80 : 0;
 const revealObserver = new IntersectionObserver(entries => {
-  for (const e of entries) if (e.isIntersecting) { e.target.classList.add('in'); revealObserver.unobserve(e.target); }
+  for (const e of entries) if (e.isIntersecting) { ditherIn(e.target, 560, delayOf(e.target)); revealObserver.unobserve(e.target); }
 }, {threshold:.15, rootMargin:'0px 0px -40px 0px'});
 document.querySelectorAll('.reveal').forEach(el => reduced ? el.classList.add('in') : revealObserver.observe(el));
 
-// hero bg slideshow
-(function(){
-  const slides = document.querySelectorAll('.hero-slide');
-  if (!slides.length) return;
-  let i = 0;
-  slides[0].classList.add('active');
-  if (slides.length > 1 && !reduced) {
-    setInterval(() => {
-      slides[i].classList.remove('active');
-      i = (i + 1) % slides.length;
-      slides[i].classList.add('active');
-    }, SLIDE_TIME_MS);
-  }
-})();
+// pixel horizons
+const heroCanvas = document.getElementById('heroCanvas');
+Horizon(heroCanvas, { image: heroCanvas.dataset.image, rise: .84 });
+Horizon(document.getElementById('communityCanvas'), { rise: .78, flip: true, cell: 4 });
+
+// hero copy dithers in once the loader is gone
+function heroIn(){
+  ['.hero-eyebrow', '.hero h1', '.hero-sub', '.hero-cta'].forEach((sel, i) => {
+    const el = document.querySelector(sel);
+    if (el) ditherIn(el, 700, i * 140);
+  });
+}
 
 // number formatting
 const compact = n => {

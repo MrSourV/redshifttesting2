@@ -7,15 +7,21 @@
 <meta name="description" content="RedShift Productions — the studio behind Breakout, the prison life experience on Roblox with a community of 1.4M+ members.">
 <meta property="og:title" content="RedShift Productions">
 <meta property="og:description" content="The studio behind Breakout on Roblox. Prisoner. Guard. Criminal. Pick your side.">
-<meta name="theme-color" content="#0b0b0e">
+<meta name="theme-color" content="#09090b">
 <link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="loading">
 
-<div id="preload">
-  <img src="assets/loader.png" alt="Loading">
+<div id="preload" role="img" aria-label="Loading">
+  <canvas id="preloadLogo" aria-hidden="true"></canvas>
+  <div class="preload-bar"><i></i></div>
 </div>
+
+<div class="grain" aria-hidden="true"></div>
 
 <nav id="nav" aria-label="Main">
   <a class="nav-brand" href="#top">
@@ -31,12 +37,12 @@
 
 <!-- hero -->
 <header class="hero" id="top">
-  <div class="hero-bg">
-    <div class="hero-slide" style="background-image:url('assets/prisonre.png')"></div>
-    <!-- <div class="hero-slide" style="background-image:url('assets/hero2.jpg')"></div>
-    <div class="hero-slide" style="background-image:url('assets/hero3.jpg')"></div> -->
+  <!-- pixel horizon, drawn by fx.js -->
+  <div class="hero-bg" aria-hidden="true">
+    <canvas id="heroCanvas" data-image="assets/prisonre.png"></canvas>
+    <span class="scanlines"></span>
   </div>
-  <div class="hero-glow"></div>
+  <span class="hero-frame" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
 
   <div class="hero-eyebrow"><b>RedShift Productions</b>presents</div>
   <h1><img class="hero-title" src="assets/breakout.png" alt=""><span class="sr-only">Breakout</span></h1>
@@ -106,7 +112,7 @@
   </div>
 </section>
 
-<!-- devs -->
+<!-- dev shit -->
 <section class="studio" id="studio" aria-labelledby="devs-title">
   <div class="wrap">
     <div class="devs-head reveal">
@@ -119,8 +125,12 @@
   </div>
 </section>
 
-<!-- community -->
+<!-- community page -->
 <section class="community" id="community" aria-labelledby="community-title">
+  <div class="community-bg" aria-hidden="true">
+    <canvas id="communityCanvas"></canvas>
+    <span class="scanlines"></span>
+  </div>
   <div class="wrap">
     <div class="reveal">
       <h2 id="community-title">1.4M+ members <br><span>Join our Community</span></h2>
@@ -134,7 +144,7 @@
   </div>
 </section>
 
-<!-- partner -->
+<!-- partners  -->
 <section class="partner" id="partner" aria-labelledby="partner-title">
   <div class="partner-inner reveal">
     <h2 class="partner-label" id="partner-title">Partnered with</h2>
@@ -157,6 +167,7 @@
 </footer>
 
 <script src="js/config.js"></script>
+<script src="js/fx.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>
